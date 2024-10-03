@@ -8,7 +8,7 @@ export const URL = 'http://localhost:8080';
 const instance = axios.create({
   baseURL: URL,
 });
-function checkCookie(name) {
+export function checkCookie(name) {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(';').shift();
@@ -20,7 +20,7 @@ instance.interceptors.request.use(async function (config) {
   // Do something before request is sent
   //axiosReq.refreshToken();
   const rftoken = checkCookie('refresh_token');
-
+  console.log('<<<', rftoken)
   let access_token = localStorage.getItem('access_token') || null;
   if (rftoken && access_token) {
     let date = new Date();

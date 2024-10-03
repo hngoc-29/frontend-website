@@ -15,6 +15,9 @@ import RegisterPage from './pages/Register';
 import styles from './App.module.scss';
 import axios from './util/axios.req';
 import {
+  checkCookie
+} from './util/axios.customize';
+import {
   AuthContext
 } from './components/context/auth.context';
 import {
@@ -26,24 +29,27 @@ function App() {
     setAuth
   } = useContext(AuthContext);
   useEffect(()=> {
+    const rfTokenCookie = document.cookie?.split('=')[0];
     const fetchAccount = async() => {
       const res = await axios.getInfoUser();
+      console.log('>>res', res)
       if (res.data && res.data.success) {
         setAuth({
           isAuthenticated: true,
           user: {
+            id: res?.data?.user?._id??null,
             name: res?.data?.user?.name??'',
             username: res?.data?.user?.username??'',
             email: res?.data?.user?.email??'',
             role: res?.data?.user?.role??'',
-            image: res?.data?.user?.image??''
+            avata: res?.data?.user?.image??''
           }
         });
-      } else{
+      } else {
         localStorage.removeItem('access_token');
       };
     };
-    fetchAccount();
+    if(rfTokenCookie === 'refresh_token') fetchAccount();
   },
     [])
   return (

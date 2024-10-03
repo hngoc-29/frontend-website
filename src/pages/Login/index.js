@@ -62,6 +62,7 @@ function Login() {
         setAuth({
           isAuthenticated: true,
           user: {
+            id: res?.data?.user?._id??null,
             name: res?.data?.user?.name??'',
             username: res?.data?.user?.username??'',
             email: res?.data?.user?.email??'',

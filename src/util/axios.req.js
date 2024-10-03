@@ -25,5 +25,12 @@ const axiosJWTRequest = {
       withCredentials: true
     })
   },
+  //logout
+  logout: async(id) => {
+    const path = '/v1/api/user/logout';
+    return await axiosJWT.post(`${path}/${id}`, {}, {
+      withCredentials: true
+    })
+  },
 }
 export default axiosJWTRequest;
