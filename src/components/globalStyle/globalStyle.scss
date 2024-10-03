@@ -1,0 +1,19 @@
+:root {
+    --white-color: #fff;
+    --black-color: #000;
+    --primary-color: #f05123;
+    --invalid-color: #f33a58;
+    --input-focus: #5ebbff;
+    --button-image: linear-gradient(70.06deg, #2cccff -5%, #22dfbf 106%);
+    --button-color: #1dbfaf;
+    --background-linear: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+a {
+    text-decoration: none;
+    color: var(--black-color);
+}

@@ -1,0 +1,19 @@
+.below {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 8px 0;
+    user-select: none;
+    color: var(--black-color);
+    font-size: 15px;
+    box-shadow: 0 -2px 0 0 rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.belowElement {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+}
