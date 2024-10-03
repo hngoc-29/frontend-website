@@ -6,11 +6,12 @@ import {
 export const AuthContext = createContext( {
   isAuthenticated: false,
   user: {
+    id: null,
     name: '',
     username: '',
     email: '',
     role: '',
-    image: ''
+    avata: ''
   }
 });
 
@@ -19,6 +20,7 @@ export const AuthWrapper = (props) => {
     setAuth] = useState( {
       isAuthenticated: false,
       user: {
+        id: null,
         name: '',
         username: '',
         email: '',
