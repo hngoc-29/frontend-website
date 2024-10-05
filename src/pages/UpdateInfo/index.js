@@ -98,9 +98,9 @@ function UpdateInfo(props) {
       }
     } catch(err) {
       if (err?.response?.data?.message) {
-        toast.error(err?.response?.data?.message)
+        toast.error(err?.response?.data?.message);
       } else {
-        toast.error('Lỗi không xác định')
+        toast.error('Lỗi không xác định');
       }
     }
     btn.current.disabled = false;
