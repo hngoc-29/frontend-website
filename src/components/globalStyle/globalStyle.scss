@@ -17,3 +17,9 @@ a {
     text-decoration: none;
     color: var(--black-color);
 }
+.loadingStatus {
+  height: 85vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

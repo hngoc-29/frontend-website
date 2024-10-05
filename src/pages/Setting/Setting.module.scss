@@ -1,0 +1,50 @@
+.setting {
+  user-select: none;
+}
+.title {
+text-align: center;
+margin-top: 10px;
+}
+.info {
+display: flex;
+flex-direction: column;
+align-items: center;
+//background-image: var(--button-image);
+background-color: var(--white-color);
+border-radius: 10px;
+box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.1);
+width: 90%;
+position: relative;
+left: 50%;
+transform: translateX(-50%);
+//padding: 10px 0;
+}
+.inUser {
+display: flex;
+flex-direction: row;
+align-items: center;
+width: 100%;
+line-height: 5px;
+padding: 2px 0;
+justify-content: space-between;
+padding: 10px 10px;
+&:hover {
+  transition: all linear 0.2s;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+h4 {
+font-size: 20px;
+}
+}
+.between {
+  flex: 1;
+}
+.inUser ~ .inUser {
+border-top: solid rgba(0, 0, 0, 0.2);
+}
+
+.avata {
+border-radius: 50%;
+width: 50px;
+height: 50px;
+}

@@ -23,31 +23,28 @@ import {
 import axios from '../../util/axios.req';
 const cx = classNames.bind(styles);
 
-function Header() {
+function Header({show, setShow}) {
   const navigate = useNavigate();
   const {
     auth,
     setAuth
   } = useContext(AuthContext);
-  console.log(">>> auth.user", auth)
-  const [show,
-    setShow] = useState(false);
   const handleLogout = async() => {
     if (auth.isAuthenticated) {
-      const res = await axios.logout(auth.user.id);
-      if(res.data.success) {
+      const res = await axios.logout(auth?.user?.id);
+      if (res.data.success) {
         localStorage.removeItem('access_token');
         setAuth( {
-  isAuthenticated: false,
-  user: {
-    id: null,
-    name: '',
-    username: '',
-    email: '',
-    role: '',
-    avata: ''
-  }
-});
+          isAuthenticated: false,
+          user: {
+            id: null,
+            name: '',
+            username: '',
+            email: '',
+            role: '',
+            avata: ''
+          }
+        });
         toast.success(res.data.message)
         return
       }
@@ -91,6 +88,7 @@ function Header() {
                   @{auth.user.username}
                 </p>
               </div>
+              
             </div>
             <div className={cx('items')}>
               {auth.user.role ? (

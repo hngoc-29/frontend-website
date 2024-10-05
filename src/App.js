@@ -4,11 +4,13 @@ import {
 } from 'react-router-dom';
 import {
   useEffect,
-  useContext
+  useContext,
+  useState,
 } from 'react';
 import classNames from 'classnames/bind';
 import Header from './components/Header'
 import HomePage from './pages/Home';
+import SettingPage from './pages/Setting';
 import LoginPage from './pages/Login';
 import Below from './components/Below'
 import RegisterPage from './pages/Register';
@@ -17,6 +19,7 @@ import axios from './util/axios.req';
 import {
   checkCookie
 } from './util/axios.customize';
+import Spinner from 'react-bootstrap/Spinner';
 import {
   AuthContext
 } from './components/context/auth.context';
@@ -28,11 +31,14 @@ function App() {
   const {
     setAuth
   } = useContext(AuthContext);
+  const [loading,
+    setLoading] = useState(true);
+  const [show,
+    setShow] = useState(false);
   useEffect(()=> {
     const rfTokenCookie = document.cookie?.split('=')[0];
     const fetchAccount = async() => {
       const res = await axios.getInfoUser();
-      console.log('>>res', res)
       if (res.data && res.data.success) {
         setAuth({
           isAuthenticated: true,
@@ -48,23 +54,34 @@ function App() {
       } else {
         localStorage.removeItem('access_token');
       };
+      setLoading(false);
     };
-    if(rfTokenCookie === 'refresh_token') fetchAccount();
+    if (rfTokenCookie === 'refresh_token') {
+      setLoading(true);
+      fetchAccount();
+    } else {
+      setLoading(false);
+    }
   },
     [])
-  return (
-    <div className="App">
-      <Header />
-      <ToastContainer />
-      <div className={cx('bodyRender')}>
-        <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/register' element={<RegisterPage />} />
-        </Routes>
-      </div>
-      <Below />
+
+  return (!loading ? (<div className="App" onClick={()=> { show?setShow(false): console.log('')}}>
+    <Header show={show} setShow={setShow} />
+    <ToastContainer />
+    <div className={cx('bodyRender')}>
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/register' element={<RegisterPage />} />
+        <Route path='/settings' element={<SettingPage />} />
+      </Routes>
     </div>
+    <Below />
+  </div>
+  ): (<div className='loadingStatus'>
+      <Spinner animation="grow" variant="warning" />
+    </div>
+  )
   );
 }
 
