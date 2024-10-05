@@ -32,5 +32,20 @@ const axiosJWTRequest = {
       withCredentials: true
     })
   },
+  //get banner
+  getBanner: async() => {
+    const path = '/v1/api/banner/';
+    return await axios.get(URL+path);
+  },
+  //update
+  updateInfo: async(id, dataChange)=> {
+    const path = `/v1/api/user/update/${id}`
+    return await axiosJWT.put(path, dataChange)
+  },
+  //update password
+  updatePassword: async(id, password) => {
+    const path = `/v1/api/user/update-password/${id}`
+    return await axiosJWT.put(path, password);
+  },
 }
 export default axiosJWTRequest;

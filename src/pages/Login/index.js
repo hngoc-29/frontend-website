@@ -46,78 +46,86 @@ function Login() {
       if (email === '' || password === '') {
         toast.error('Vui lòng nhập email và Mật khẩu.');
       } else {
-        toast.error('email hoặc Password sai.');
+        toast.error('Email hoặc mật khẩu sai.');
       }
     } else {
-      setLoading(true);
-      btnSubmit.current.disabled = true;
-      const res = await axios.login({
-        email,
-        password
-      })
-      if (res.data.success) {
-        const access_token = res.data.access_token;
-        localStorage.setItem('access_token', access_token);
-        setIsLogin(access_token);
-        setAuth({
-          isAuthenticated: true,
-          user: {
-            id: res?.data?.user?._id??null,
-            name: res?.data?.user?.name??'',
-            username: res?.data?.user?.username??'',
-            email: res?.data?.user?.email??'',
-            role: res?.data?.user?.role??'',
-            avata: res?.data?.user?.image??''
-          }
+      try {
+        setLoading(true);
+        btnSubmit.current.disabled = true;
+        const res = await axios.login({
+          email,
+          password
         })
-        navigate('/');
-        toast.success('Đăng nhập thành công');
-      } else toast.error(res.data.message)
+        if (res.data.success) {
+          const access_token = res.data.access_token;
+          localStorage.setItem('access_token', access_token);
+          setIsLogin(access_token);
+          setAuth({
+            isAuthenticated: true,
+            user: {
+              id: res?.data?.user?._id??null,
+              name: res?.data?.user?.name??'',
+              username: res?.data?.user?.username??'',
+              email: res?.data?.user?.email??'',
+              role: res?.data?.user?.role??'',
+              avata: res?.data?.user?.image??''
+            }
+          })
+          navigate('/');
+          toast.success('Đăng nhập thành công');
+        }
+      } catch(err) {
+        if(err.response?.data?.message){
+        toast.error(err.response?.data?.message)
+        } else {
+          toast.error('Lỗi không xác định')
+        }
+      }
       setLoading(false);
       btnSubmit.current.disabled = false;
     }
-  };
+};
 
-  return (
-    <div className={cx('login')}>
-      <form onSubmit={handleLogin} className={cx('loginForm')}>
-        <h2 className={cx('title')}>Đăng nhập</h2>
-        <div className={cx('form')}>
-          <div className={cx('input')}>
-            <input
-            placeholder='Nhập email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value.trim())}
-            />
-        </div>
+return (
+  <div className={cx('login')}>
+    <form onSubmit={handleLogin} className={cx('loginForm')}>
+      <h2 className={cx('title')}>Đăng nhập</h2>
+      <div className={cx('form')}>
         <div className={cx('input')}>
           <input
-          type={isShowPassword ? 'text': 'password'}
-          value={password}
-          placeholder='Nhập mật khẩu'
-          onChange={(e) => setPassword(e.target.value.trim())}
+          placeholder='Nhập email'
+          value={email}
+          onChange={(e) => setEmail(e.target.value.trim())}
           />
-        <i
-          className={
-          isShowPassword
-          ? 'fa-solid fa-eye-slash loginIcon': 'fa-solid fa-eye loginIcon'
-          }
-          onClick={() => setIsShowPassword(!isShowPassword)}
-          ></i>
       </div>
-      <div className={cx('btn')}>
-        <button ref={btnSubmit} className={cx('btnSubmit')}>
-          {loading ? <i className="fa-solid fa-spinner"></i>: <span>Đăng nhập</span>}
-        </button>
-      </div>
-      <div className={cx('register')}>
-        Bạn chưa có tài khoản?{' '}
-        <Link to='/register' className={cx('registerSpan')}>
-          Đăng kí
-        </Link>
-      </div>
+      <div className={cx('input')}>
+        <input
+        type={isShowPassword ? 'text': 'password'}
+        value={password}
+        placeholder='Nhập mật khẩu'
+        onChange={(e) => setPassword(e.target.value.trim())}
+        />
+      <i
+        className={
+        isShowPassword
+        ? 'fa-solid fa-eye-slash loginIcon': 'fa-solid fa-eye loginIcon'
+        }
+        onClick={() => setIsShowPassword(!isShowPassword)}
+        ></i>
     </div>
-  </form>
+    <div className={cx('btn')}>
+      <button ref={btnSubmit} className={cx('btnSubmit')}>
+        {loading ? <i className="fa-solid fa-spinner"></i>: <span>Đăng nhập</span>}
+      </button>
+    </div>
+    <div className={cx('register')}>
+      Bạn chưa có tài khoản?{' '}
+      <Link to='/register' className={cx('registerSpan')}>
+        Đăng kí
+      </Link>
+    </div>
+  </div>
+</form>
 </div>
 );
 }
