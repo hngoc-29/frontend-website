@@ -48,7 +48,7 @@ function UpdateInfo(props) {
   }
   const updateAvata = async()=> {
     try {
-      if(!newAvata) {
+      if (!newAvata) {
         toast.error('Vui lòng chọn avata')
         return
       }
@@ -65,6 +65,7 @@ function UpdateInfo(props) {
         }
       });
       toast.success(res?.data?.message)
+      setShowUpdate(false);
     } catch(err) {
       toast.error(err?.response?.data?.message)
     }
@@ -89,6 +90,10 @@ function UpdateInfo(props) {
     } else if (type === 'username') {
       changeValue.name = auth.user.name;
       changeValue.avata = auth.user.avata;
+      if (changeInput.username.trim().length < 6) {
+        toast.error('Tên người dùng phải >= 6 kí tự')
+        return
+      }
       if (changeInput.username.trim() !== auth.user.username) {
         changeValue.username = (changeInput.username).trim();
       } else {
@@ -168,6 +173,7 @@ function UpdateInfo(props) {
       })
       if (res.data.success) {
         toast.success(res.data.message);
+        setShowUpdate(false)
       } else {
         toast.error(res.data.message)
       }
