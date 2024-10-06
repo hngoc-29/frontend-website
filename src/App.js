@@ -16,15 +16,13 @@ import Below from './components/Below'
 import RegisterPage from './pages/Register';
 import styles from './App.module.scss';
 import axios from './util/axios.req';
-import {
-  checkCookie
-} from './util/axios.customize';
 import Spinner from 'react-bootstrap/Spinner';
 import {
   AuthContext
 } from './components/context/auth.context';
 import {
-  ToastContainer
+  ToastContainer,
+  toast
 } from 'react-toastify';
 const cx = classNames.bind(styles)
 function App() {
@@ -36,36 +34,40 @@ function App() {
   const [show,
     setShow] = useState(false);
   useEffect(()=> {
-    const rfTokenCookie = document.cookie?.split('=')[0];
     const fetchAccount = async() => {
-      const res = await axios.getInfoUser();
-      if (res.data && res.data.success) {
-        setAuth({
-          isAuthenticated: true,
-          user: {
-            id: res?.data?.user?._id??null,
-            name: res?.data?.user?.name??'',
-            username: res?.data?.user?.username??'',
-            email: res?.data?.user?.email??'',
-            role: res?.data?.user?.role??'',
-            avata: res?.data?.user?.image??''
-          }
-        });
-      } else {
+      try {
+        setLoading(true);
+        const res = await axios.getInfoUser();
+        if (res.data && res.data.success) {
+          setAuth({
+            isAuthenticated: true,
+            user: {
+              id: res?.data?.user?._id??null,
+              name: res?.data?.user?.name??'',
+              username: res?.data?.user?.username??'',
+              email: res?.data?.user?.email??'',
+              role: res?.data?.user?.role??'',
+              avata: res?.data?.user?.image??''
+            }
+          });
+        }
+      } catch(err) {
         localStorage.removeItem('access_token');
-      };
+        toast.error(err?.response?.data?.message);
+      }
       setLoading(false);
     };
+    const rfTokenCookie = document.cookie?.split('=')[0];
     if (rfTokenCookie === 'refresh_token') {
-      setLoading(true);
       fetchAccount();
     } else {
+      localStorage.removeItem('access_token');
       setLoading(false);
     }
   },
     [])
 
-  return (!loading ? (<div className="App" onClick={()=> { show?setShow(false): console.log('')}}>
+  return (!loading ? (<div className="App" onClick={()=> { if (show)setShow(false)}}>
     <Header show={show} setShow={setShow} />
     <ToastContainer />
     <div className={cx('bodyRender')}>

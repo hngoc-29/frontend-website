@@ -57,24 +57,25 @@ function Setting() {
           setTypeUpdate('avata')}}>
           <div className={cx('between')}>
             <h4 className={cx('avata-title')}>Ảnh đại diện</h4>
-            <img src={auth.user.avata} className={cx('avata')}></img>
-          </div>
-          <i className="fa-solid fa-chevron-right"></i>
+            <img src={auth.user.avata} className={cx('avata')} alt='avata' />
         </div>
+        <i className="fa-solid fa-chevron-right"></i>
       </div>
-      <h2 className={cx('title')}>Bảo mật</h2>
-      <div className={cx('info')}>
-        <div className={cx('inUser')} onClick={()=> { setShowUpdate(true)
-          setTypeUpdate('password')}}>
-          <div className={cx('between')}>
-            <h4 className={cx('changePassword')}>Đổi mật khẩu</h4>
-          </div>
-          <i className="fa-solid fa-chevron-right"></i>
-        </div>
-      </div>
-      {showUpdate && (<UpdateInfo setShowUpdate={setShowUpdate} typeUpdate={typeUpdate} />)}
     </div>
-  )
+    <h2 className={cx('title')}>Bảo mật</h2>
+    <div className={cx('info')}>
+      <div className={cx('inUser')} onClick={()=> { setShowUpdate(true)
+        setTypeUpdate('password')}}>
+        <div className={cx('between')}>
+          <h4 className={cx('changePassword')}>Đổi mật khẩu</h4>
+        </div>
+        <i className="fa-solid fa-chevron-right"></i>
+      </div>
+    </div>
+    {showUpdate && (<UpdateInfo
+      setShowUpdate={setShowUpdate} typeUpdate={typeUpdate} />)}
+  </div>
+)
 };
 
 export default Setting;

@@ -31,19 +31,18 @@ function Home() {
     fetchBanner();
   },
     [])
-  console.log(banners)
   return(
     <div className={cx('home')}>
       {
       banners.map(item => (
         <div className={cx('category')} key={`id-${item._id}`}>
           <div className={cx('image')}>
-            <img className={cx('bannerImage')} src={item.image_url} />
+            <img className={cx('bannerImage')} src={item.image_url} alt={item.title} />
         </div>
         <div className={cx('content')}>
           <h3 className={cx('title')}>{item.title}</h3>
           <div className={cx('numberOfTracks')}>
-            <i class="fa-solid fa-circle-play">  {item.number_of_tracks}</i>
+            <i className="fa-solid fa-circle-play">  {item.number_of_tracks}</i>
           </div>
         </div>
       </div>

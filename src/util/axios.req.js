@@ -47,5 +47,12 @@ const axiosJWTRequest = {
     const path = `/v1/api/user/update-password/${id}`
     return await axiosJWT.put(path, password);
   },
+  //update avata
+  updateAvata: async(id, avata)=>{
+    const path = `/v1/api/user/update-avata/${id}`
+    return await axiosJWT.put(path, avata, {headers: {
+          'Content-Type': 'multipart/form-data',
+        }},)
+  }
 }
 export default axiosJWTRequest;

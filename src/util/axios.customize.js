@@ -8,29 +8,32 @@ export const URL = 'http://localhost:8080';
 const instance = axios.create({
   baseURL: URL,
 });
-export function checkCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-}
+
 // Alter defaults after instance has been created
 //instance.defaults.headers.common['Authorization'] = localStorage.getItem('access_token');
 // Add a request interceptor
 instance.interceptors.request.use(async function (config) {
   // Do something before request is sent
   //axiosReq.refreshToken();
-  const rftoken = checkCookie('refresh_token');
+  const rftoken = document.cookie?.split('=')[0];
   let access_token = localStorage.getItem('access_token') || null;
-  if (rftoken && access_token) {
+  if (rftoken === 'refresh_token' && access_token) {
     let date = new Date();
-    const decodeToken = jwt_decode(access_token);
-    if (decodeToken.exp < date.getTime()/1000) {
-      const res = await axiosReq.refreshToken();
-      access_token = res?.data?.access_token;
-      localStorage.setItem('access_token', access_token)
-    };
+    try {
+      const decodeToken = jwt_decode(access_token);
+      if (decodeToken.exp < date.getTime()/1000) {
+        const res = await axiosReq.refreshToken();
+        access_token = res?.data?.access_token;
+        localStorage.setItem('access_token', access_token)
+      };
+    } catch(err) {
+      localStorage.removeItem('access_token')
+      document.cookie = 'refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+      return err
+    }
   } else {
     localStorage.removeItem('access_token')
+    document.cookie = 'refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
     return;
   }
   config.headers.Authorization = `Bearer ${access_token}`;

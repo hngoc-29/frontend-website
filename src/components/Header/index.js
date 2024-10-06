@@ -7,9 +7,7 @@ import {
   Button
 } from 'react-bootstrap';
 import {
-  useState,
   useContext,
-  useEffect
 } from 'react';
 import {
   Link
@@ -23,7 +21,9 @@ import {
 import axios from '../../util/axios.req';
 const cx = classNames.bind(styles);
 
-function Header({show, setShow}) {
+function Header( {
+  show, setShow
+}) {
   const navigate = useNavigate();
   const {
     auth,
@@ -80,6 +80,7 @@ function Header({show, setShow}) {
                   width={50}
                   height={50}
                   style={ { borderRadius: '50%' }}
+                  alt='avata'
                   />
               </div>
               <div className={cx('infoText')}>
@@ -88,7 +89,7 @@ function Header({show, setShow}) {
                   @{auth.user.username}
                 </p>
               </div>
-              
+
             </div>
             <div className={cx('items')}>
               {auth.user.role ? (

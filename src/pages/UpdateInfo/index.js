@@ -17,6 +17,8 @@ const cx = classNames.bind(styles);
 function UpdateInfo(props) {
   const [loading,
     setLoading] = useState(false);
+  const [newAvata,
+    setNewAvata] = useState(null);
   const btn = useRef();
   const {
     setShowUpdate,
@@ -38,10 +40,38 @@ function UpdateInfo(props) {
     event.stopPropagation()
   }
   const handleClose = () => {
-    setShowUpdate(false)
+    if (!loading) {
+      setShowUpdate(false)
+    } else {
+      toast.warning('Vui lòng đợi')
+    }
   }
+  const updateAvata = async()=> {
+    try {
+      if(!newAvata) {
+        toast.error('Vui lòng chọn avata')
+        return
+      }
+      setLoading(true)
+      btn.current.disabled = true;
+      const res = await axios.updateAvata(auth.user.id, {
+        avata: newAvata
+      });
+      setAuth({
+        isAuthenticated: true,
+        user: {
+          ...auth.user,
+          avata: res?.data?.user?.image??''
+        }
+      });
+      toast.success(res?.data?.message)
+    } catch(err) {
+      toast.error(err?.response?.data?.message)
+    }
+    setLoading(false);
+    btn.current.disabled = false;
+  };
   const handleUpdate = async (type) => {
-    console.log(btn.current)
     const changeValue = {
       name: auth.user.name,
       username: auth.user.username,
@@ -63,15 +93,6 @@ function UpdateInfo(props) {
         changeValue.username = (changeInput.username).trim();
       } else {
         toast.error('Vui lòng nhập tên người dùng mới');
-        return;
-      }
-    } else if (type === 'avata') {
-      changeValue.username = auth.user.username;
-      changeValue.name = auth.user.name;
-      if (changeInput.avata.trim() !== auth.user.avata) {
-        changeValue.avata = changeInput.avata.trim();
-      } else {
-        toast.error('Vui lòng nhập tên mới');
         return;
       }
     }
@@ -106,6 +127,14 @@ function UpdateInfo(props) {
     btn.current.disabled = false;
     setLoading(false);
   }
+  const changeAvata = async(e)=> {
+    const avata = e.target.files[0];
+    setNewAvata(avata);
+    const avata_url = URL.createObjectURL(avata)
+    setChangeInput({
+      ...changeInput, avata: avata_url
+    });
+  };
   const changePassword = async() => {
     const {
       password,
@@ -181,13 +210,8 @@ function UpdateInfo(props) {
       <i onClick={handleClose} className="fa-solid fa-xmark"></i>
       <h3 className={cx('title')}>Chỉnh sửa ảnh đại diện</h3>
       <img src={changeInput.avata} alt='avata' />
-    <input value={changeInput.avata}
-    onChange={e=>setChangeInput({
-      ...changeInput,
-      avata: e.target.value })}
-    placeholder='Nhập đường dẫn tới ảnh của bạn' />
-  <span>Lấy đường dẫn ảnh <a href='https://www.truongblogger.top/p/upload-anh.html'>Tại đây</a></span>
-  <button ref={btn} onClick={()=> { handleUpdate('avata')}}>{loading ? <i className="fa-solid fa-spinner"></i>: <span>Xác nhận</span>}</button>
+    <input accept="image/*" type='file' onChange={changeAvata} />
+  <button onClick={updateAvata} ref={btn}>{loading ? <i className="fa-solid fa-spinner"></i>: <span>Xác nhận</span>}</button>
 </div>
 ): (
 <div onClick={handleClickUpdate} className={cx('update')}>

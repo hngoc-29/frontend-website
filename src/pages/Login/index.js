@@ -2,7 +2,6 @@ import classNames from 'classnames/bind';
 import {
   useState,
   useRef,
-  useEffect,
   useContext
 } from 'react';
 import {
@@ -36,10 +35,7 @@ function Login() {
     setLoading] = useState(false);
   const btnSubmit = useRef();
   const navigate = useNavigate();
-  useEffect(() => {
     if (isLogin) navigate('/');
-  },
-    [isLogin])
   const handleLogin = async(event) => {
     event.preventDefault();
     if (email.length < 6 || password.length < 6) {
